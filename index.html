@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>App Compra Junta</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;600;700&family=Nunito+Sans:wght@400;600;700;800&display=swap">
+<style>
+/* Un teléfono centrado; en celular ocupa toda la pantalla. Look de app único y claro, elegido a propósito. */
+:root{
+  --verde:#1F7A5C; --verde-osc:#14513D; --verde-claro:#E3EFE8; --menta:#A9D3BD;
+  --tinta:#14232B; --gris:#5A6670; --linea:#DCE3DE; --fondo:#F7F5EF; --blanco:#FFFFFF;
+  --ambar:#C98A1B; --ambar-claro:#FBF1DC; --afuera:#E6E9E4;
+  --display:'Rubik',system-ui,Arial,sans-serif; --texto:'Nunito Sans',system-ui,Arial,sans-serif;
+  color-scheme:light;
+}
+html,body{height:100%}
+body{margin:0;background:var(--afuera);color:var(--tinta);font-family:var(--texto);font-size:16px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px;box-sizing:border-box}
+*{box-sizing:border-box}
+.tel{max-width:400px;margin:0 auto;background:var(--fondo);border-radius:32px;overflow:hidden;box-shadow:0 20px 50px rgba(20,35,43,.18);min-height:760px;display:flex;flex-direction:column}
+@media (max-width:480px){body{padding-block:0;padding-left:0;padding-right:0;background:var(--fondo)} .tel{border-radius:0;box-shadow:none;min-height:100%}}
+header{background:var(--verde);color:var(--blanco);padding:18px 20px 20px;display:flex;flex-direction:column;gap:4px}
+.top{display:flex;align-items:center;gap:12px;min-height:36px}
+.back{background:rgba(255,255,255,.16);color:var(--blanco);border:0;border-radius:10px;width:36px;height:36px;font-size:20px;cursor:pointer}
+.back[hidden]{display:none}
+.marca{font-family:var(--display);font-weight:700;font-size:20px}
+.sub{font-size:14px;color:var(--verde-claro)}
+h1{font-family:var(--display);font-size:24px;font-weight:600;margin:4px 0 0;text-wrap:balance}
+main{flex:1;padding:18px 18px 24px;display:flex;flex-direction:column;gap:14px}
+.card{background:var(--blanco);border:1px solid var(--linea);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px}
+button.card{text-align:left;font:inherit;color:inherit;cursor:pointer}
+button.card:hover{border-color:var(--verde)}
+:focus-visible{outline:3px solid var(--ambar);outline-offset:2px}
+.fila>span:first-child{min-width:0}
+.fila{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.prod{font-family:var(--display);font-weight:600;font-size:18px}
+.chip{font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:var(--verde-claro);color:var(--verde-osc);white-space:nowrap}
+.chip.ambar{background:var(--ambar-claro);color:#7A520C}
+.barra{height:10px;background:var(--verde-claro);border-radius:6px;overflow:hidden}
+.barra i{display:block;height:100%;width:0;background:var(--verde);border-radius:6px;transition:width 1.2s ease}
+.peq{font-size:14px;color:var(--gris)}
+.num{font-variant-numeric:tabular-nums}
+.ahorro{color:var(--verde);font-weight:800}
+.lista{display:flex;flex-direction:column}
+.fila>span:last-child,.fila>b:last-child{white-space:nowrap;flex:none}
+.lista .fila{padding:9px 0;border-bottom:1px solid var(--linea)}
+.lista .fila:last-child{border-bottom:0}
+.total{font-family:var(--display);font-size:22px;font-weight:700}
+.btn{background:var(--verde);color:var(--blanco);border:0;border-radius:14px;padding:16px;font:800 17px var(--texto);cursor:pointer;width:100%}
+.btn:hover{background:var(--verde-osc)}
+.btn.sec{background:var(--blanco);color:var(--verde);border:2px solid var(--verde)}
+.paso{display:flex;gap:12px;align-items:flex-start}
+.dot{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--linea);background:var(--blanco);display:grid;place-items:center;font-size:14px;font-weight:800;color:var(--gris)}
+.paso.ok .dot{background:var(--verde);border-color:var(--verde);color:var(--blanco)}
+.paso.ahora .dot{border-color:var(--ambar);color:#7A520C}
+.paso b{display:block}
+.stepper{display:flex;align-items:center;gap:10px}
+.stepper button{width:44px;height:44px;border-radius:12px;border:2px solid var(--verde);background:var(--blanco);color:var(--verde);font-size:22px;font-weight:800;cursor:pointer}
+.stepper output{font-family:var(--display);font-size:26px;font-weight:700;min-width:90px;text-align:center}
+.seg{display:flex;gap:8px}
+.seg button{flex:1;padding:10px;border-radius:12px;border:2px solid var(--linea);background:var(--blanco);font:700 15px var(--texto);cursor:pointer;color:var(--tinta)}
+.seg button[aria-pressed="true"]{border-color:var(--verde);background:var(--verde-claro);color:var(--verde-osc)}
+.regalo{background:var(--ambar-claro);border:1px solid #EBD3A0;border-radius:14px;padding:12px 14px;font-size:14px;color:#5E4009}
+.estrellas{display:flex;gap:6px}
+.estrellas button{font-size:30px;background:none;border:0;cursor:pointer;color:var(--linea);padding:0}
+.estrellas button.on{color:var(--ambar)}
+.grande{font-family:var(--display);font-size:40px;font-weight:700;color:var(--verde)}
+footer{padding:12px 18px 18px;text-align:center;font-size:12px;color:var(--gris)}
+@media (prefers-reduced-motion:reduce){.barra i{transition:none}}
+</style>
+
+</head>
+<body>
+<div class="tel">
+  <header>
+    <div class="top">
+      <button class="back" id="back" hidden aria-label="Volver">←</button>
+      <span class="marca">Compra Junta</span>
+    </div>
+    <h1 id="titulo">Campañas abiertas</h1>
+    <span class="sub" id="sub">Ferretería Don Luis · Cuenca</span>
+  </header>
+  <main id="vista"></main>
+  <footer>Prototipo conceptual · datos de ejemplo</footer>
+</div>
+
+<script>
+const MIN=2000, FAB=2.10, FLETE=0.22, ARAN=0.31, COM=FAB*0.05, PRECIO=Math.floor((FAB+FLETE+ARAN+COM)*100)/100, DISTR=3.40;
+const st={reservado:1440,kg:100,anticipo:15,paso:0,estrellas:0,hecho:false};
+const $=s=>document.querySelector(s);
+const usd=n=>'USD '+n.toLocaleString('es-EC',{minimumFractionDigits:2,maximumFractionDigits:2});
+const pct=n=>Math.round(n)+'\u00a0%';
+let historial=[];
+
+const campañas=[
+  {id:'torn',nombre:'Tornillos 2×2 para drywall',ferr:31,dias:6,ahorro:20,activa:true},
+  {id:'clav',nombre:'Clavos de acero 2½"',pct:88,ferr:42,dias:3,ahorro:18},
+  {id:'broc',nombre:'Brocas HSS juego de 13',pct:45,ferr:17,dias:11,ahorro:22}
+];
+
+function ir(v,push=true){ if(push) historial.push(actual); actual=v; pintar(); window.scrollTo(0,0); }
+let actual='inicio';
+$('#back').onclick=()=>{ actual=historial.pop()||'inicio'; pintar(); };
+
+function cab(t,s){ $('#titulo').textContent=t; $('#sub').textContent=s; $('#back').hidden=historial.length===0; }
+
+function pintar(){
+  const v=$('#vista');
+  if(actual==='inicio'){
+    historial=[];
+    cab('Campañas abiertas','Ferretería Don Luis · Cuenca');
+    const p=st.reservado/MIN*100;
+    v.innerHTML=`<p class="peq">Pide lo mismo de siempre. Cuando se junta el mínimo de la fábrica, compramos.</p>`+
+    campañas.map(c=>{const pc=c.activa?p:c.pct; const ferr=c.activa&&st.hecho?c.ferr+1:c.ferr;
+      return `<button class="card" data-c="${c.id}">
+        <div class="fila"><span class="prod">${c.nombre}</span>${c.activa&&st.hecho?'<span class="chip">Reservado</span>':`<span class="chip ambar">Cierra en ${c.dias} días</span>`}</div>
+        <div class="barra"><i data-w="${Math.min(pc,100)}"></i></div>
+        <div class="fila peq num"><span>${pct(pc)} del mínimo · ${ferr} ferreterías</span><span class="ahorro">Ahorras ${c.ahorro} %</span></div>
+      </button>`}).join('');
+    requestAnimationFrame(()=>requestAnimationFrame(()=>v.querySelectorAll('.barra i').forEach(i=>i.style.width=i.dataset.w+'%')));
+    v.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{ if(b.dataset.c==='torn') ir(st.hecho?'seguimiento':'detalle'); else ir('pronto'); });
+  }
+  if(actual==='pronto'){
+    cab('Próximamente','Esta campaña es parte del ejemplo');
+    v.innerHTML=`<div class="card"><p>En este prototipo puedes recorrer la campaña de tornillos de principio a fin.</p></div><button class="btn" id="a">Ver tornillos</button>`;
+    $('#a').onclick=()=>ir('detalle');
+  }
+  if(actual==='detalle'){
+    cab('Tornillos 2×2','Fábrica en China · lote mínimo 2.000 kg');
+    const falta=Math.max(MIN-st.reservado,0);
+    v.innerHTML=`
+    <div class="card"><div class="fila"><span class="peq">Precio final puesto en tu ferretería</span></div>
+      <div class="fila"><span class="total num">${usd(PRECIO).replace('USD ','USD ')} por kg</span></div>
+      <div class="fila peq num"><span>Tu última compra al distribuidor ${usd(DISTR)}</span><span class="ahorro">−${pct((1-PRECIO/DISTR)*100)}</span></div></div>
+    <div class="card"><b>Así se arma el precio</b><div class="lista num">
+      <div class="fila"><span>Precio de fábrica</span><span>${usd(FAB)}</span></div>
+      <div class="fila"><span>Flete y seguro</span><span>${usd(FLETE)}</span></div>
+      <div class="fila"><span>Aranceles e impuestos</span><span>${usd(ARAN)}</span></div>
+      <div class="fila"><span>Comisión Compra Junta 5 %</span><span>USD 0,105</span></div>
+      <div class="fila"><b>Total por kg</b><b>${usd(PRECIO)}</b></div></div></div>
+    <div class="card"><div class="barra"><i style="width:${st.reservado/MIN*100}%"></i></div>
+      <span class="peq num">Faltan ${falta.toLocaleString('es-EC')} kg para el mínimo. Si no se llega, te devolvemos el anticipo.</span></div>
+    <div class="card"><div class="fila"><b>Calidad de lotes anteriores</b><span class="ahorro">★ 4,6</span></div>
+      <span class="peq">Cada lote se revisa en nuestra bodega de paso antes de salir.</span></div>
+    <button class="btn" id="a">Reservar</button>`;
+    $('#a').onclick=()=>ir('reservar');
+  }
+  if(actual==='reservar'){
+    cab('Tu reserva','Tornillos 2×2 para drywall');
+    const sub=st.kg*PRECIO, desc=st.kg*COM, tot=sub-desc, ant=tot*st.anticipo/100;
+    v.innerHTML=`
+    <div class="card"><b>¿Cuántos kilos pides?</b><span class="peq">Lo mismo que le pides al distribuidor cada mes</span>
+      <div class="stepper"><button id="m" aria-label="Menos 10 kg">−</button><output class="num">${st.kg} kg</output><button id="p" aria-label="Más 10 kg">+</button></div></div>
+    <div class="card"><b>Anticipo</b><div class="seg">
+      <button data-a="15" aria-pressed="${st.anticipo===15}">15 %</button><button data-a="20" aria-pressed="${st.anticipo===20}">20 %</button></div></div>
+    <div class="card"><div class="lista num">
+      <div class="fila"><span>${st.kg} kg × ${usd(PRECIO)}</span><span>${usd(sub)}</span></div>
+      <div class="fila"><span>Primera campaña sin comisión</span><span class="ahorro">−${usd(desc)}</span></div>
+      <div class="fila"><b>Total</b><b>${usd(tot)}</b></div>
+      <div class="fila"><span>Pagas hoy (anticipo ${st.anticipo} %)</span><b>${usd(ant)}</b></div>
+      <div class="fila"><span>Pagas al recibir</span><span>${usd(tot-ant)}</span></div></div></div>
+    <div class="regalo">Frente al distribuidor ahorras <b class="num">${usd(st.kg*DISTR-tot)}</b> en esta compra.</div>
+    <button class="btn" id="a">Pagar anticipo de ${usd(ant)}</button>`;
+    $('#m').onclick=()=>{st.kg=Math.max(10,st.kg-10);pintar()};
+    $('#p').onclick=()=>{st.kg=Math.min(500,st.kg+10);pintar()};
+    v.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{st.anticipo=+b.dataset.a;pintar()});
+    $('#a').onclick=()=>{st.hecho=true; st.reservado+=st.kg; st.paso=1; ir('listo');};
+  }
+  if(actual==='listo'){
+    cab('Reserva confirmada','Tornillos 2×2 para drywall');
+    v.innerHTML=`<div class="card" style="align-items:center;text-align:center;gap:6px;padding:28px 16px">
+      <span class="grande">✓</span><b style="font-size:20px">Tu anticipo fue recibido</b>
+      <span class="peq num">La campaña ya va en ${pct(st.reservado/MIN*100)} del mínimo</span></div>
+      <p class="peq">Te avisamos por la app en cada paso. Si la campaña no llega al mínimo, te devolvemos el anticipo completo.</p>
+      <button class="btn" id="a">Seguir mi pedido</button><button class="btn sec" id="b">Volver a campañas</button>`;
+    $('#a').onclick=()=>ir('seguimiento');
+    $('#b').onclick=()=>{historial=[];actual='inicio';pintar()};
+  }
+  if(actual==='seguimiento'){
+    cab('Seguimiento','Tornillos 2×2 · '+st.kg+' kg');
+    const pasos=[
+      ['Reserva y anticipo','Recibimos tu pedido'],
+      ['Mínimo alcanzado','Se juntaron 2.000 kg entre varias ferreterías'],
+      ['Pedido a la fábrica','Compramos el lote a nombre de Compra Junta'],
+      ['Lote revisado','Lo inspeccionamos y separamos en la bodega de paso'],
+      ['Entregado','Recibes todo lo que pediste con tu factura']];
+    v.innerHTML=`<div class="card" style="gap:16px">`+pasos.map((p,i)=>`<div class="paso ${i<st.paso?'ok':i===st.paso?'ahora':''}"><span class="dot">${i<st.paso?'✓':i+1}</span><span><b>${p[0]}</b><span class="peq">${p[1]}</span></span></div>`).join('')+`</div>`+
+      (st.paso<5?`<button class="btn" id="a">Simular siguiente paso</button><p class="peq" style="text-align:center">En la app real cada paso llega como aviso</p>`:
+      `<div class="card" style="text-align:center;align-items:center"><span class="peq">Ahorraste en esta compra</span><span class="grande num">${usd(st.kg*(DISTR-PRECIO+COM))}</span>
+        <b>¿Cómo llegó el lote?</b><div class="estrellas">${[1,2,3,4,5].map(n=>`<button data-s="${n}" class="${n<=st.estrellas?'on':''}" aria-label="${n} estrellas">★</button>`).join('')}</div>
+        <span class="peq">${st.estrellas?'Gracias. Tu calificación ayuda a elegir las fábricas.':'Tu calificación ayuda a elegir las fábricas'}</span></div>
+        <button class="btn sec" id="b">Empezar de nuevo</button>`);
+    if($('#a')) $('#a').onclick=()=>{st.paso++;pintar()};
+    v.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{st.estrellas=+b.dataset.s;pintar()});
+    if($('#b')) $('#b').onclick=()=>{Object.assign(st,{reservado:1440,kg:100,anticipo:15,paso:0,estrellas:0,hecho:false});historial=[];actual='inicio';pintar()};
+  }
+}
+pintar();
+</script>
+
+</body>
+</html>
